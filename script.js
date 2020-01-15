@@ -1,0 +1,1 @@
+const btn = Document.querySelector("div");
