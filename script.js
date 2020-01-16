@@ -46,7 +46,13 @@ function putDot(string){
             continue;
         }
         else{
-            array[i] = array[i] + ".";
+            if (i == array.length - 1){
+                if (array[i] > -1 && array[i] < 1){
+                    array[i] = array[i] + "0";
+                }
+                array[i] = array[i] + ".";
+            }
+            continue;
         }
     }
     for (let j = 1; j < array.length; j += 2){
@@ -62,10 +68,15 @@ function makeNegative(string){
             if (i == array.length - 1){
                 array[i] = array[i].substr(1);
             }
-            continue;
+            else{
+                continue;
+            }
+        }
+        else if (i == array.length - 1){
+            array[i] = "-" + array[i];
         }
         else{
-            array[i] = "-" + array[i];
+            continue;
         }
     }
     for (let j = 1; j < array.length; j += 2){
@@ -98,7 +109,6 @@ function log(buttonPress){
     else if (buttonPress.length > 1){
     }
     else{
-        //need to figure out this logic to make the negative sign work likelu need to loop through the array
         if (buttonPress == "-"){
             displayedString = makeNegative(displayedString);
             update(displayedString);
@@ -150,9 +160,6 @@ let displayedString = "";
 let total = 0;
 let equated = false;
 let operated = false;
-let negatived = false;
-let proportioned = false;
-let dotted = false;
 
 const runningTotal = document.getElementById("screen");
 
@@ -180,7 +187,12 @@ btns.forEach((btn) => {
                 operated = false;
                 equated = false;
             }
-            switch(btn.getAttribute("id")){
+            if (equated == true && btn.getAttribute("id") == "dot" && displayedString.split(" ").length <= 1){
+                displayedString = "0.";
+                operated = false;
+                equated = false;
+            }
+            switch (btn.getAttribute("id")){
                 case "dot" :
                     log(".");
                     break;
