@@ -39,6 +39,22 @@ function update(newValue){
         runningTotal.appendChild(screenContent);
     }
 }
+function putDot(string){
+    let array = string.split(" ");
+    for (let i = 0; i < array.length; i += 2){
+        if (array[i].includes(".")){
+            continue;
+        }
+        else{
+            array[i] = array[i] + ".";
+        }
+    }
+    for (let j = 1; j < array.length; j += 2){
+        array[j] = " " + array[j] + " ";
+    }
+
+    return array.join("");
+}
 
 function log(buttonPress){
     if (buttonPress.length > 1 && operated != true && displayedString != "") {
@@ -63,45 +79,14 @@ function log(buttonPress){
     else if (buttonPress.length > 1){
     }
     else{
+        //need to figure out this logic to make the negative sign work likelu need to loop through the array
         if (buttonPress == "-"){
-            let moddedArray = displayedString.split("");
-            if (moddedArray.includes("-") && moddedArray.includes(" - ") == false){
-                moddedArray.splice(moddedArray.indexOf("-") -1, 1)
-                displayedString = moddedArray.join("");
-                update(displayedString);
-            }
-            else{
-                moddedArray = displayedString.split(" ")
-                moddedArray.splice(moddedArray.length, 0, buttonPress);
-                displayedString = moddedArray.join("");
-                update(displayedString);
-            }
+
         }
-        else if (buttonPress == "%"){
-            let moddedArray = displayedString.split("");
-            if (moddedArray[moddedArray.length - 1] == "%"){
-                moddedArray.pop();
-                displayedString = moddedArray.join("");
-                update(displayedString);
-            }
-            else{
-                displayedString = displayedString.concat(buttonPress);
-                update(displayedString);
-            }
-            
-        }
+        //need to figure out this logic to make the dot sign work
         else if (buttonPress == "."){
-            let moddedArray = displayedString.split("");
-            if (moddedArray.includes(".") == true && moddedArray[0] == "."){
-                moddedArray.shift();
-                displayedString = moddedArray.join("");
-                update(displayedString);
-            }
-            else if (moddedArray.includes(".")){}
-            else{
-                displayedString = displayedString.concat(buttonPress);
-                update(displayedString);
-            }
+            displayedString = putDot(displayedString);
+            update(displayedString);
         }
         else {
             displayedString = displayedString.concat(buttonPress);
@@ -179,9 +164,6 @@ btns.forEach((btn) => {
             switch(btn.getAttribute("id")){
                 case "dot" :
                     log(".");
-                    break;
-                case "percentage" :
-                    log("%");
                     break;
                 case "negative" :
                     log("-");

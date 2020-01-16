@@ -39,6 +39,14 @@ button{
 .number{
     background-color: orange;
 }
+
 #short{
+    flex-grow: 0;
+}
+#divide{
+    background-color: buttonface;
+}
+
+#topright{
     flex-grow: 0;
 }
