@@ -41,7 +41,8 @@ function update(newValue){
 }
 
 function log(buttonPress){
-    if (buttonPress.length > 1) {
+    if (buttonPress.length > 1 && operated != true && displayedString != "") {
+        operated = true;
         switch (buttonPress){
             case "multiply" : 
                 buttonPress = " x ";
@@ -56,9 +57,58 @@ function log(buttonPress){
                 buttonPress = " + ";
                 break;
         }
+        displayedString = displayedString.concat(buttonPress);
+        update(displayedString);
     }
-    displayedString = displayedString.concat(buttonPress);
-    update(displayedString);
+    else if (buttonPress.length > 1){
+    }
+    else{
+        if (buttonPress == "-"){
+            let moddedArray = displayedString.split("");
+            if (moddedArray.includes("-") && moddedArray.includes(" - ") == false){
+                moddedArray.splice(moddedArray.indexOf("-") -1, 1)
+                displayedString = moddedArray.join("");
+                update(displayedString);
+            }
+            else{
+                moddedArray = displayedString.split(" ")
+                moddedArray.splice(moddedArray.length, 0, buttonPress);
+                displayedString = moddedArray.join("");
+                update(displayedString);
+            }
+        }
+        else if (buttonPress == "%"){
+            let moddedArray = displayedString.split("");
+            if (moddedArray[moddedArray.length - 1] == "%"){
+                moddedArray.pop();
+                displayedString = moddedArray.join("");
+                update(displayedString);
+            }
+            else{
+                displayedString = displayedString.concat(buttonPress);
+                update(displayedString);
+            }
+            
+        }
+        else if (buttonPress == "."){
+            let moddedArray = displayedString.split("");
+            if (moddedArray.includes(".") == true && moddedArray[0] == "."){
+                moddedArray.shift();
+                displayedString = moddedArray.join("");
+                update(displayedString);
+            }
+            else if (moddedArray.includes(".")){}
+            else{
+                displayedString = displayedString.concat(buttonPress);
+                update(displayedString);
+            }
+        }
+        else {
+            displayedString = displayedString.concat(buttonPress);
+            update(displayedString);
+            operated = false;
+        }
+    }
 }
 
 function evaluate(statement){
@@ -94,8 +144,11 @@ function evaluate(statement){
 // Main
 let displayedString = "";
 let total = 0;
-let solutionHolder = "";
 let equated = false;
+let operated = false;
+let negatived = false;
+let proportioned = false;
+let dotted = false;
 
 const runningTotal = document.getElementById("screen");
 
@@ -108,20 +161,34 @@ btns.forEach((btn) => {
             displayedString = displayedString.toString();
             if (displayedString == 0) {
                 displayedString = "";
+                operated = false;
             }
             equated = true;
         }
         else if (btn.getAttribute("id") == "clear") {
             update(0);
             displayedString = "";
+            operated = false;
         }
-        else { 
-            console.log("tripped");      
+        else {   
             if (equated == true && btn.getAttribute("id") <= 9 && displayedString.split(" ").length <= 1){
                 displayedString = "";
+                operated = false;
                 equated = false;
             }
-            log(btn.getAttribute("id"));   
+            switch(btn.getAttribute("id")){
+                case "dot" :
+                    log(".");
+                    break;
+                case "percentage" :
+                    log("%");
+                    break;
+                case "negative" :
+                    log("-");
+                    break;
+                default: 
+                    log(btn.getAttribute("id"));  
+            } 
         } 
     });
 });
