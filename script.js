@@ -1,5 +1,4 @@
 function add(a, b){
-
     return a + b;
 }
 function subtract(a, b){
@@ -14,7 +13,6 @@ function multiply(a, b){
 
 function operate(num1, num2, operator){
     if (operator == "+"){
-
         return add(Number(num1), Number(num2));
     }
     if (operator == "-"){
@@ -61,22 +59,43 @@ function log(buttonPress){
     }
     displayedString = displayedString.concat(buttonPress);
     update(displayedString);
-    
 }
 
 function evaluate(statement){
     let solution = 0;
     let array = statement.split(" ");
     for (i = 0; i < array.length; i++){
-        if (array[i] == "+"){
-            solution += operate(array[i - 1], array[i + 1], array[i]);
+        if (i < 2){
+            if (array[i] == "+" || array[i] == "-"){
+                solution += operate(array[i - 1], array[i + 1], array[i]);
+            }
+            if (array[i] == "x"){
+                solution += operate(array[i - 1], array[i + 1], array[i]);
+            }
+            if (array[i] == "/"){
+                solution += operate(array[i - 1], array[i + 1], array[i]);
+            }
+        }
+        else {
+            if (array[i] == "+" || array[i] == "-"){
+                solution += operate(array[i - 1], array[i + 1], array[i]);
+            }
+            if (array[i] == "x"){
+                solution = operate(solution, array[i + 1], array[i]);
+            }
+            if (array[i] == "/"){
+                solution = operate(solution, array[i + 1], array[i]);
+            }
         }
     }
-    update(solution);
+    return solution;
 }
 
-let displayedString = ""
+// Main
+let displayedString = "";
 let total = 0;
+let solutionHolder = "";
+let equated = false;
 
 const runningTotal = document.getElementById("screen");
 
@@ -84,17 +103,27 @@ const btns = document.querySelectorAll("button");
 btns.forEach((btn) => {
     btn.addEventListener('click', (e) => {
         if (btn.getAttribute("id") == "equals") {
-            evaluate(displayedString);
+            update(evaluate(displayedString));
+            displayedString = evaluate(displayedString);
+            displayedString = displayedString.toString();
+            if (displayedString == 0) {
+                displayedString = "";
+            }
+            equated = true;
         }
         else if (btn.getAttribute("id") == "clear") {
             update(0);
             displayedString = "";
-
         }
-        else {
-            log(btn.getAttribute("id"));  
+        else { 
+            console.log("tripped");      
+            if (equated == true && btn.getAttribute("id") <= 9 && displayedString.split(" ").length <= 1){
+                displayedString = "";
+                equated = false;
+            }
+            log(btn.getAttribute("id"));   
         } 
     });
 });
 
-update(total)
+update(total);
