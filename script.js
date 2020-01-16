@@ -55,6 +55,25 @@ function putDot(string){
 
     return array.join("");
 }
+function makeNegative(string){
+    let array = string.split(" ");
+    for (let i = 0; i < array.length; i += 2){
+        if (array[i].includes("-")){
+            if (i == array.length - 1){
+                array[i] = array[i].substr(1);
+            }
+            continue;
+        }
+        else{
+            array[i] = "-" + array[i];
+        }
+    }
+    for (let j = 1; j < array.length; j += 2){
+        array[j] = " " + array[j] + " ";
+    }
+
+    return array.join("");
+}
 
 function log(buttonPress){
     if (buttonPress.length > 1 && operated != true && displayedString != "") {
@@ -81,9 +100,9 @@ function log(buttonPress){
     else{
         //need to figure out this logic to make the negative sign work likelu need to loop through the array
         if (buttonPress == "-"){
-
+            displayedString = makeNegative(displayedString);
+            update(displayedString);
         }
-        //need to figure out this logic to make the dot sign work
         else if (buttonPress == "."){
             displayedString = putDot(displayedString);
             update(displayedString);
